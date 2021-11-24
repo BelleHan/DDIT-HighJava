@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="member">
+					
+	<insert id="insertMember" parameterClass="memberVo">
+		insert into mymember (mem_id, mem_pass, mem_name, mem_tel, mem_addr)
+		values (#mem_id#, #mem_pass#, #mem_name#, #mem_tel#, #mem_addr#)
+	</insert>
+	
+	<delete id="deleteMember" parameterClass="String">
+		delete from mymember where mem_id = #mem_id#
+	</delete>
+					   
+	<update id="updateMember" parameterClass="memberVo">
+		update mymember set 
+			mem_pass = #mem_pass#, 
+			mem_name = #mem_name#, 
+			mem_tel = #mem_tel#, 
+			mem_addr = #mem_addr#
+		where mem_id = #mem_id#
+	</update>
+					   
+	<select id="getAllMember" resultClass="memberVo">
+		select * from mymember
+	</select>
+	
+	<select id="getCountMember" parameterClass="String" resultClass="int">
+		select count(*) cnt from mymember where mem_id = #mem_id#
+	</select>
+	
+	<!-- 
+		Map을 파라미터로 받아서 처리할 때 변수명은 Map의 key값으로 한다.
+		데이터가 들어갈 자리는 ##을 사용하고 필드값이 들어갈 자리는 $$를 사용한다.
+		
+		파라미터로 가져온 값을 컬럼명등의 자리에 사용할 경우에는 달러($)기호를 사용해서
+		나타낸다. 예) $변수명$ 또는 $key값$
+		
+		##이 들어가는 곳에는 내가 입력한 데이터에 자동으로 ''이 붙어서 인식된다. 
+		하지만 필드값(컬럼명)은 ''(문자열로 인식)이 들어가면 안되기 때문에 그렇게 하기 위해 $$를 이용한다.
+	 -->
+	<update id="updateMember2" parameterClass="java.util.Map">
+		update mymember set $field$ = #data#  
+		where mem_id= #memId#
+	</update>
+					   
+</sqlMap>
